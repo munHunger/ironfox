@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ironfox/sheet.dart';
 
 void main() => runApp(new MyApp());
 
@@ -24,6 +25,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Sheet currentSheet = new Sheet();
   int _counter = 0;
 
   void _incrementCounter() {
@@ -36,44 +38,50 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       body: new Center(
-        child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Container(
-              padding: new EdgeInsets.all(0.0),
-              width: 300.0,
-              decoration: new BoxDecoration(
-                border: new Border(
-                  top: new BorderSide(
-                    color: Colors.black
-                  )
-                )
-              ),
-              child: new Text('♩ ♩', textScaleFactor: 2.0,),
-            ),
-            new Container(
-              padding: new EdgeInsets.all(0.0),
-              width: 300.0,
-              decoration: new BoxDecoration(
-                border: new Border(
-                  bottom: new BorderSide(
-                    color: Colors.black
-                  ), 
-                  top: new BorderSide(
-                    color: Colors.black
-                  )
-                )
-              ),
-              child: new Text('  ♩', textScaleFactor: 2.0,),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
-      ),
+        child: new Container(
+          color: Colors.white30,
+          child: new GridView.count(
+              scrollDirection: Axis.horizontal,
+              crossAxisCount: 2,
+              childAspectRatio: 1.0,
+              padding: const EdgeInsets.all(4.0),
+              mainAxisSpacing: 0.0,
+              crossAxisSpacing: 0.0,
+              children: currentSheet.acordions
+                .map((Acordion acordion) { // get all the acordions in the sheet
+                  return acordion.note;
+                })
+                .map((List<Note> noteList) { //Map out all notes that are in the range
+                  return noteList.where((Note note) { return (note.value / 100).floor() == 1;}).toList();
+                })
+                .map((List<Note> noteList) {
+                  return noteList.where((Note note) { return ((note.value % 100) / 10).floor() == 1;}).toList().isNotEmpty;
+                })
+                .map((bool isNote) {
+                  return new GridTile(
+                    child: Container(
+                      width: 1.0,
+                      height: 1.0,
+                      padding: new EdgeInsets.all(0.0),
+                      decoration: new BoxDecoration(
+                        color: isNote ? Colors.lightBlueAccent : Colors.lightGreenAccent,
+                        border: new Border(
+                          bottom: new BorderSide(
+                            color: Colors.black
+                          ), 
+                          top: new BorderSide(
+                            color: Colors.black
+                          ),
+                          left: new BorderSide(
+                            color: Colors.black12
+                          )
+                        )
+                      )
+                    ),
+                  );
+                }).toList()),
+        )
+      )
     );
   }
 }

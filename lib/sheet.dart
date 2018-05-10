@@ -3,6 +3,19 @@
  */
 class Sheet {
   List<Acordion> acordions;
+  Sheet() {
+    acordions = new List<Acordion>();
+    Acordion acordion = new Acordion();
+    acordions.add(acordion);
+    acordion.note.add(new Note(110));
+
+    acordion = new Acordion();
+    acordions.add(acordion);
+    acordion.note.add(new Note(120));
+    acordion = new Acordion();
+    acordions.add(acordion);
+    acordion.note.add(new Note(110));
+  }
 }
 
 /**
@@ -10,7 +23,10 @@ class Sheet {
  * Should be max 4 notes in an acordion
  */
 class Acordion {
-  List<Note> note; 
+  List<Note> note;
+  Acordion() {
+    note = new List<Note>();
+  }
 }
 
 /**
@@ -24,4 +40,7 @@ class Note {
    * 1s represent alteration, 0 is not specified
    */
   int value;
+  Note(int value) {
+    this.value = value;
+  }
 }
